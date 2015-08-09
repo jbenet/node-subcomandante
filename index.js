@@ -1,4 +1,7 @@
 var comandante = require('comandante')
+var Path = require('path')
+
+var subcom = Path.join(__dirname, 'subcom')
 
 // spawn a child process that will only live
 // as long as its parent. If the parent dies,
@@ -16,5 +19,5 @@ module.exports = function (cmd, args, opts) {
   delete opts.waitPid
 
   args = [w, cmd].concat(args)
-  return comandante('./subcom', args, opts)
+  return comandante(subcom, args, opts)
 }
