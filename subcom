@@ -1,0 +1,100 @@
+#!/usr/bin/env node
+
+var isrunning = require('is-running')
+var run = require('comandante')
+var os = require('os')
+
+if (process.argv.length < 4) {
+  process.stdout.write('usage: subcom <pid> <cmd>...\n')
+  process.stdout.write('run <cmd> until <pid> exits.\n')
+  process.exit(0)
+}
+
+try {
+  var parent = {pid: parseInt(process.argv[2], 10)}
+  var cmd = process.argv[3]
+  var args = process.argv.slice(4)
+} catch (e) {
+  die(e)
+}
+
+if (!parent) {
+  die(new Error("no parent pid specified"))
+}
+
+var child = run(cmd, args)
+var done = {
+  code: 0,
+  exit: false,
+  stdout: false,
+  stderr: false,
+}
+
+// ignore child error (non-zero exit codes)
+child.on('error', function() {})
+child.on('exit', function(code) {
+  done.exit = true
+  done.code = code
+  exitWhenDone()
+})
+child.stdout.on('finish', function() {
+  done.stdout = true
+  exitWhenDone()
+})
+child.stderr.on('finish', function() {
+  done.stderr = true
+  exitWhenDone()
+})
+
+// wire up io
+process.stdin.pipe(child.stdin)
+child.stdout.pipe(process.stdout)
+child.stderr.pipe(process.stderr)
+
+// check on parent
+checkParent()
+
+function exitWhenDone() {
+  if (done.exit && done.stdout && done.stderr) {
+    process.exit(done.code)
+  }
+}
+
+function checkParent() {
+  var i = setInterval(per, 1000)
+
+  function per() {
+    isrunning(parent.pid, function(err, live) {
+      // console.log("parent running?", err, live)
+      if (err) return die(err)
+      if (live) return // not yet.
+
+      clearInterval(i)
+      killChild()
+    })
+  }
+}
+
+function killChild() {
+  var times = 0
+  var i = setInterval(per, 250)
+
+  function per() {
+    isrunning(child.pid, function(err, live) {
+      // console.log("child running?", err, live)
+      // if (err) return die(err) // ignore error. try to kill anyway.
+      if (live === false) {
+        clearInterval(i)
+        return
+      }
+
+      child.kill( times < 10 ? 'SIGKILL' : 'SIGTERM' )
+      times++
+    })
+  }
+}
+
+function die(e) {
+  process.stderr.write(e + "\n")
+  process.exit(1)
+}

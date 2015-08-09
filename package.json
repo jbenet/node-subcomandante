@@ -1,0 +1,28 @@
+{
+  "name": "subcomandante",
+  "version": "1.0.0",
+  "description": "run a command but wait on the parent",
+  "main": "index.js",
+  "bin": {
+    "subcom": "subcom"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jbenet/node-subcomandante"
+  },
+  "keywords": [
+    "subcomandante",
+    "comandante",
+    "process",
+    "exit"
+  ],
+  "author": "Juan Benet <juan@benet.ai> (http://juan.benet.ai/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jbenet/node-subcomandante/issues"
+  },
+  "homepage": "https://github.com/jbenet/node-subcomandante"
+}
