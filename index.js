@@ -19,5 +19,14 @@ module.exports = function (cmd, args, opts) {
   delete opts.waitPid
 
   args = [w, cmd].concat(args)
-  return comandante(subcom, args, opts)
+  var cmd = comandante(subcom, args, opts)
+
+  // catch SIGKILL and send SIGHUP so subcom kills the child.
+  cmd.kill_ = cmd.kill
+  cmd.kill = function(sig) {
+    sig = (sig == 'SIGKILL') ? 'SIGHUP' : sig
+    cmd.kill_(sig)
+  }
+
+  return cmd
 }

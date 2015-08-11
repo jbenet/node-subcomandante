@@ -30,6 +30,23 @@ var done = {
   stderr: false,
 }
 
+// fwd signals
+var fwdSigs = ['SIGINT', 'SIGPIPE', 'SIGBREAK', 'SIGABRT',
+  'SIGQUIT', 'SIGWINCH', 'SIGUSR1', 'SIGTERM']
+
+for (var s in fwdSigs) {
+  var sig = fwdSigs[s]
+  console.log('forwarding', sig)
+  process.on(sig, function() {
+    child.kill(sig)
+  })
+}
+// subcomandante treats SIGHUP like a SIGTERM followed by SIGKILL
+process.on('SIGHUP', function() {
+  child.kill('SIGHUP')
+  killChild()
+})
+
 // ignore child error (non-zero exit codes)
 child.on('error', function() {})
 child.on('exit', function(code) {
@@ -76,6 +93,8 @@ function checkParent() {
 }
 
 function killChild() {
+  killChild = function() {} // call only once.
+
   var times = 0
   var i = setInterval(per, 250)
 
