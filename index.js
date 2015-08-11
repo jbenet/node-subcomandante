@@ -24,7 +24,9 @@ module.exports = function (cmd, args, opts) {
   // catch SIGKILL and send SIGHUP so subcom kills the child.
   cmd.kill_ = cmd.kill
   cmd.kill = function(sig) {
-    sig = (sig == 'SIGKILL') ? 'SIGHUP' : sig
+    if (sig === 'SIGKILL') {
+      sig = 'SIGHUP'
+    }
     cmd.kill_(sig)
   }
 

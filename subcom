@@ -36,7 +36,6 @@ var fwdSigs = ['SIGINT', 'SIGPIPE', 'SIGBREAK', 'SIGABRT',
 
 for (var s in fwdSigs) {
   var sig = fwdSigs[s]
-  console.log('forwarding', sig)
   process.on(sig, function() {
     child.kill(sig)
   })
