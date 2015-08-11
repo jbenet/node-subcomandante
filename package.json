@@ -1,6 +1,6 @@
 {
   "name": "subcomandante",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "run a command but wait on the parent",
   "main": "index.js",
   "bin": {
@@ -24,5 +24,10 @@
   "bugs": {
     "url": "https://github.com/jbenet/node-subcomandante/issues"
   },
-  "homepage": "https://github.com/jbenet/node-subcomandante"
+  "homepage": "https://github.com/jbenet/node-subcomandante",
+  "dependencies": {
+    "comandante": "0.0.1",
+    "is-running": "^1.0.5"
+  },
+  "devDependencies": {}
 }
