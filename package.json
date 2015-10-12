@@ -1,6 +1,6 @@
 {
   "name": "subcomandante",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "run a command but wait on the parent",
   "main": "index.js",
   "bin": {

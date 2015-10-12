@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 var isrunning = require('is-running')
 var run = require('comandante')
 var os = require('os')
