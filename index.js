@@ -1,8 +1,7 @@
-var comandante = require('comandante')
 var Path = require('path')
+var fork = require('./fork')
 
 var subcom = Path.join(__dirname, 'subcom')
-var node = process.argv[0]
 
 // spawn a child process that will only live
 // as long as its parent. If the parent dies,
@@ -19,8 +18,8 @@ module.exports = function (cmd, args, opts) {
   var w = opts.waitPid || process.pid
   delete opts.waitPid
 
-  args = [subcom, w, cmd].concat(args)
-  var cmd = comandante(node, args, opts)
+  args = [w, cmd].concat(args)
+  var cmd = fork(subcom, args, opts)
 
   // catch SIGKILL and send SIGHUP so subcom kills the child.
   cmd.kill_ = cmd.kill
