@@ -51,11 +51,11 @@ child.on('exit', function(code) {
   done.code = code
   exitWhenDone()
 })
-child.stdout.on('finish', function() {
+child.stdout.on('end', function() {
   done.stdout = true
   exitWhenDone()
 })
-child.stderr.on('finish', function() {
+child.stderr.on('end', function() {
   done.stderr = true
   exitWhenDone()
 })
