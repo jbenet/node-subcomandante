@@ -28,6 +28,7 @@
   "dependencies": {
     "comandante": "0.0.1",
     "duplexer": "^0.1.1",
+    "end-of-stream": "^1.4.1",
     "is-running": "^1.0.5"
   },
   "devDependencies": {

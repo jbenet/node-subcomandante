@@ -1,6 +1,7 @@
 var isrunning = require('is-running')
 var run = require('comandante')
 var os = require('os')
+var eos = require('end-of-stream')
 
 if (process.argv.length < 4) {
   process.stdout.write('usage: subcom <pid> <cmd>...\n')
@@ -51,11 +52,13 @@ child.on('exit', function(code) {
   done.code = code
   exitWhenDone()
 })
-child.stdout.on('finish', function() {
+
+eos(child.stdout, { error: false }, function () {
   done.stdout = true
   exitWhenDone()
 })
-child.stderr.on('finish', function() {
+
+eos(child.stderr, { error: false }, function () {
   done.stderr = true
   exitWhenDone()
 })
