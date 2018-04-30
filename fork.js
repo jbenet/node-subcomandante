@@ -17,14 +17,16 @@ module.exports = function (file, args, opts) {
   }
 
   ps.on('close', function (code) {
-    if (code === 0) return
-    dup.emit('error', new Error(
-      'non-zero exit code ' + code
-        + (!opts || opts.showCommand !== false
-           ? '\n  while running: ' + file + ' ' + args.join(' ')
-           : ''
-          )
-        + '\n\n  ' + err))
+    if (code !== 0) {
+      return dup.emit('error', new Error(
+        'non-zero exit code ' + code
+          + (!opts || opts.showCommand !== false
+             ? '\n  while running: ' + file + ' ' + args.join(' ')
+             : ''
+            )
+          + '\n\n  ' + err))
+    }
+    dup.emit('success')
   })
 
   var dup = duplexer(ps.stdin, ps.stdout)
